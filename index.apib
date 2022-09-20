@@ -5,38 +5,82 @@ FORMAT: 1A
 ## フリマアプリAPI
 本設計書で指定しているパラメータ及び、URLは仮のものである。
 
-# Echo Hello [/items{?userId}]
+
+# GET items [/items{?userId}]
 
 ## 商品一覧取得API [GET]
 
 + Parameters
     + userId: 4944 (number) - ユーザーID
 
-
 + Response 200 (application/json)
   レスポンスオブジェクト
   | パラメーター名 | 型           | 内容                |
   | :----------- | ------------ | -------------------|
+  | `result` | boolean | 実行結果|
+  | `status` | number| ステータスコード|
+  | `accessToken` | string | アクセストークン|
   | `title`  | string           | 商品名       |
   | `makeAt` | string | 商品作成時間。ISO8601に基づいて表示 |
   | `id`  | number             |  商品ID       |
   | `category`  | string          |  カテゴリー名       |
-  | `status`  | string        |  商品ステータス       |
+  | `itemStatus`  | string        |  商品ステータス       |
   | `url`  | string            |  商品ページURL       |
   | `num`  | number            |   在庫数      |
   | `price`  | number |  1つ当たりの単価。〇〇円だが数字のみ返却      |
   | `description`  | string |  商品説明       |
   | `images`  | string |  商品画像があるURL       |
+  
+  
 
     + Attributes (object)
+        + result: true (boolean) -実行結果
+        + status: 200 (number) -ステータスコード
+        + accessToken: f58ba22059f5a8aa8f346e0f40987adab326041fac99029c909bef2c6300821a (string, required) - アクセストークン
         + items()
             + title: プリンター (string) - 商品名
             + makeAt: 2015-05-05T12:30:00 (string) - 作成日時 (ISO8601 format)
             + id: 2345 (number) - 商品ID
             + category: electronics (string) - カテゴリー名
-            + status: 発送待ち (string) - 商品ステータス 
+            + itemStatus: 発送待ち (string) - 商品ステータス 
             + url:https://ex.com/user/item/329801204 (string) - 商品ページURL
             + num: 20 (number) - 在庫数
             + price: 2000 (number) - 値段
             + description: 新古品です (string) - 商品説明
-            + images: https://ex.com/user/item/329801204/images (string) - 商品画像URL
+            + images: https://ex.com/user/item/329801204/images (string) - 商品画像があるURL
+            
+
+# POST Item data [/items{?userId,means,meansSuccess,requestId}]
+## 商品一覧取得API [POST]
+
++ Parameters
+    + userId: 4944 (number) - ユーザーID
+    + means: 1 (number,optional) - 決済手段（1:クレカ、3:コンビニ決済、5:その他）
+    + meansSuccess: true (boolean,optional) - 決済の可否
+    + requestId: 9934 (number) - 請求ID
+
+
++ Response 200 (application/json)
+  レスポンスオブジェクト
+  | パラメーター名 | 型           | 内容                |
+  | :----------- | ------------ | -------------------|
+  | `result` | boolean | 実行結果|
+  | `status` | number| ステータスコード|
+  | `accessToken` | string | アクセストークン|
+
+
+    + Attributes
+        + result: true (boolean) -実行結果
+        + status: 200 (number) -ステータスコード
+        + accessToken: f58ba22059f5a8aa8f346e0f40987adab326041fac99029c909bef2c6300821a (string, required) - アクセストークン
+
+# COMMON [/message]]
+GET、POST共にステータスコードについては以下の通りに定める
+
+  ステータスコード
+  | コード | 意味           |
+  | :----------- | ------------ |
+  | 200  | 成功           |
+  | 400 | 不正リクエスト (パラーメータ不足等) | 
+  | 401  | 認証失敗             |
+  | 404  | 未検出。リソースが見つからなかった。          |
