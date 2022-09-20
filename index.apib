@@ -39,4 +39,29 @@ FORMAT: 1A
             + num: 20 (number) - 在庫数
             + price: 2000 (number) - 値段
             + description: 新古品です (string) - 商品説明
-            + images: https://ex.com/user/item/329801204/images (string) - 商品画像URL
+            + images: https://ex.com/user/item/329801204/images (string) - 商品画像があるURL
+
+# POST Item data [/items{?userId,means,meansSuccess,requestId}]
+## 商品一覧取得API [POST]
+
++ Parameters
+    + userId: 4944 (number) - ユーザーID
+    + means: 1 (number,optional) - 決済手段（1:クレカ、3:コンビニ決済、5:その他）
+    + meansSuccess: true (boolean,optional) - 決済の可否
+    + requestId: 9934 (number) - 請求ID
+
+
++ Response 200 (application/json)
+  ステータスコード
+  | コード | 意味           |
+  | :----------- | ------------ |
+  | 200  | 成功           |
+  | 400 | 不正リクエスト (パラーメータ不足等) | 
+  | 401  | 認証失敗             |
+  | 402  |           |
+
+
+    + Attributes
+        + result: true (boolean) -実行結果
+        + status: 200 (number) -ステータスコード
+        + accessToken: f58ba22059f5a8aa8f346e0f40987adab326041fac99029c909bef2c6300821a (string, required) - アクセストークン
